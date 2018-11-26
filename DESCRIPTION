@@ -1,0 +1,18 @@
+Package: HCAMatrixBrowser
+Title: Extract and manage matrix data from the Human Cell Atlas project
+Version: 0.0.1
+Authors@R: 
+    person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
+           email = "marcel.ramos@roswellpark.org")
+Description: The HCAMatrixBrowser uses the HCABrowser package to query the HCA
+  API for expression datasets and returns a Bioconductor object
+License: Artistic-2.0
+Depends:
+  R (>= 3.6.0),
+  HCABrowser
+Imports:
+  BiocFileCache,
+  LoomExperiment
+BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
+biocViews: Infrastructure, DataRepresentation
+VignetteBuilder: knitr
