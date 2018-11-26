@@ -16,3 +16,4 @@ Imports:
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
 biocViews: Infrastructure, DataRepresentation
 VignetteBuilder: knitr
+RoxygenNote: 6.1.1
