@@ -20,6 +20,14 @@ NULL
     httr::content(response)[["request_id"]]
 }
 
+.dotter <- function(ndots, maxlength) {
+    paste0(
+        paste0(rep(".", times = ndots), collapse = ""),
+        paste0(rep(" ", times = maxlength-ndots), collapse = ""),
+        collapse = ""
+    )
+}
+
 #' @name HCAMatrix
 #' @title Obtain expression matrix data from the Human Cell Atlas API service
 #'
@@ -69,16 +77,10 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
             identical(httr::content(httr::GET(req_address))[["status"]],
                       "In Progress")
         ) {
-            pb$tick(tokens = list(dots = "    "))
-            Sys.sleep(1/8)
-            pb$tick(tokens = list(dots = ".   "))
-            Sys.sleep(1/8)
-            pb$tick(tokens = list(dots = "..  "))
-            Sys.sleep(1/8)
-            pb$tick(tokens = list(dots = "... "))
-            Sys.sleep(1/8)
-            pb$tick(tokens = list(dots = "...."))
-            Sys.sleep(1/8)
+            for (ndot in 0:10) {
+                pb$tick(tokens = list(dots = .dotter(ndot, 10)))
+                Sys.sleep(2/8)
+            }
         }
 
         get_response <- httr::GET(req_address)
