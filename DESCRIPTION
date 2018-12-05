@@ -12,6 +12,7 @@ Depends:
   HCABrowser
 Imports:
   BiocFileCache,
+  digest,
   LoomExperiment
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
 biocViews: Infrastructure, DataRepresentation

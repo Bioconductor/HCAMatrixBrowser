@@ -2,14 +2,11 @@
 % Please edit documentation in R/getHCAMatrix.R
 \name{HCAMatrix}
 \alias{HCAMatrix}
-\alias{getHCAMatrixID}
 \alias{loadHCAMatrix}
 \title{Obtain expression matrix data from the Human Cell Atlas API service}
 \usage{
-getHCAMatrixID(bundle_fqids, matrix_query_url = .matrix_query_url,
-  verbose = TRUE)
-
-loadHCAMatrix(request_id)
+loadHCAMatrix(bundle_fqids, matrix_query_url = .matrix_query_url,
+  verbose = FALSE)
 }
 \arguments{
 \item{bundle_fqids}{A character vector of bundle identifiers}
@@ -17,21 +14,16 @@ loadHCAMatrix(request_id)
 \item{matrix_query_url}{A single character vector of the API endpoint for
 downloading matrix data (defaults to HCA matrix endpoint)}
 
-\item{verbose}{logical (default TRUE) whether to output stepwise messages}
-
-\item{request_id}{A single string obtained from the getHCAMatrixID function}
+\item{verbose}{logical (default FALSE) whether to output stepwise messages}
 }
 \value{
-getHCAMatrixID: A request identifier as a single string
-
-loadHCAMatrix: A LoomExperiment object
+A LoomExperiment object
 }
 \description{
-Using a vector of data bundle identifiers (`bundle_fqids`), users
-can request the associated matrix of expression values. The query submitted
-by `getHCAMatrixID` can take some time to be completed. Once the query is
-completed, users can use the `request_id` to load the dataset as a
-`LoomExperiment` object using the `loadHCAMatrix` function.
+Using a vector of data bundle identifiers (`bundle_fqids`),
+users can request the associated matrix of expression values. The query
+submitted by `loadHCAMatrix` may take some time to be completed. Once the
+query is completed, a `LoomExperiment` object is loaded.
 }
 \details{
 The matrix_query_url value points to
@@ -43,8 +35,6 @@ bundle_fqids <-
     c("980b814a-b493-4611-8157-c0193590e7d9.2018-11-12T131442.994059Z",
     "7243c745-606d-4827-9fea-65a925d5ab98.2018-11-07T002256.653887Z")
 
-req_id <- getHCAMatrixID(bundle_fqids)
-
-loadHCAMatrix(req_id)
+loadHCAMatrix(bundle_fqids)
 
 }
