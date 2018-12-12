@@ -1,15 +1,17 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
-           email = "marcel.ramos@roswellpark.org")
+        email = "marcel.ramos@roswellpark.org")
 Description: The HCAMatrixBrowser queries the HCA matrix endpoint to download
   expression data and returns a standard Bioconductor object. It uses the
   LoomExperiment package to serve matrix data that is downloaded as HDF5 loom
   format.
 License: Artistic-2.0
-Depends: R (>= 3.6.0)
+Depends:
+  R (>= 3.6.0),
+  SummarizedExperiment
 Imports:
   BiocFileCache,
   digest,

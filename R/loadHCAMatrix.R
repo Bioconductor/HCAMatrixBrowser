@@ -8,7 +8,7 @@ NULL
 }
 
 .initialize_download <- function(fq_ids, query_url = .matrix_query_url,
-    format = "loom")
+    format = "loom", verbose)
 {
     if (missing(fq_ids))
         stop("<internal> Provide valid fq_ids vector")
@@ -16,7 +16,7 @@ NULL
     header <- list(`Content-Type` = "application/json",
         Accept = "application/json")
     response <- httr::POST(query_url, header, body = body, encode = "json",
-        httr::verbose())
+        if (verbose) httr::verbose())
     httr::content(response)[["request_id"]]
 }
 
@@ -54,7 +54,7 @@ NULL
 #'
 #' loadHCAMatrix(bundle_fqids)
 #'
-#' @export
+#' @export loadHCAMatrix
 loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
     verbose = FALSE)
 {
@@ -63,7 +63,8 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
     if (!length(rid)) {
         req_id <-
-            .initialize_download(bundle_fqids, query_url = matrix_query_url)
+            .initialize_download(bundle_fqids, query_url = matrix_query_url,
+                verbose = verbose)
         if (verbose)
             message("Matrix query request_id: ", req_id)
 
