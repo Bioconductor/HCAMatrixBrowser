@@ -43,8 +43,11 @@ NULL
 #' @param matrix_query_url A single character vector of the API endpoint for
 #' downloading matrix data (defaults to HCA matrix endpoint)
 #' @param verbose logical (default FALSE) whether to output stepwise messages
+#' @param names.col character (default "CellID") The column name in the
+#' `colData`` metadata to use as column names of the
+#' \linkS4class{LoomExperiment} object
 #'
-#' @return A LoomExperiment object
+#' @return A \linkS4class{LoomExperiment} object
 #'
 #' @examples
 #'
@@ -56,8 +59,11 @@ NULL
 #'
 #' @export loadHCAMatrix
 loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
-    verbose = FALSE)
+    verbose = FALSE, names.col = "CellID")
 {
+    stopifnot(is.character(names.col), length(names.col) == 1L,
+        !is.na(names.col), !is.logical(names.col))
+
     rname_digest <- .rname_digest(bundle_fqids)
     bfc <- .get_cache()
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
@@ -94,5 +100,9 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
 
     mat_loc <- bfcrpath(bfc, rids = rid)
 
-    LoomExperiment::import(mat_loc)
+    lex <- LoomExperiment::import(mat_loc)
+    idcol <- lex[[names.col]]
+    if (length(idcol))
+        colnames(lex) <- idcol
+    lex
 }

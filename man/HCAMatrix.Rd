@@ -6,7 +6,7 @@
 \title{Obtain expression matrix data from the Human Cell Atlas API service}
 \usage{
 loadHCAMatrix(bundle_fqids, matrix_query_url = .matrix_query_url,
-  verbose = FALSE)
+  verbose = FALSE, names.col = "CellID")
 }
 \arguments{
 \item{bundle_fqids}{A character vector of bundle identifiers}
@@ -15,9 +15,13 @@ loadHCAMatrix(bundle_fqids, matrix_query_url = .matrix_query_url,
 downloading matrix data (defaults to HCA matrix endpoint)}
 
 \item{verbose}{logical (default FALSE) whether to output stepwise messages}
+
+\item{names.col}{character (default "CellID") The column name in the
+`colData`` metadata to use as column names of the
+\linkS4class{LoomExperiment} object}
 }
 \value{
-A LoomExperiment object
+A \linkS4class{LoomExperiment} object
 }
 \description{
 Using a vector of data bundle identifiers (`bundle_fqids`),
