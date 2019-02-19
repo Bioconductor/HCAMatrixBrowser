@@ -82,7 +82,7 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
 
         while (
             identical(httr::content(httr::GET(req_address))[["status"]],
-                      "In Progress")
+                "In Progress")
         ) {
             for (ndot in 0:10) {
                 pb$tick(tokens = list(dots = .dotter(ndot, 10)))

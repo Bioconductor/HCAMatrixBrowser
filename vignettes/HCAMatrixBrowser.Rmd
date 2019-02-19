@@ -1,0 +1,75 @@
+---
+title: "HCAMatrixBrowser"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+  %\VignetteIndexEntry{HCAMatrixBrowser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    toc_float: true
+Package: HCAMatrixBrowser
+---
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+    library(HCABrowser)
+    library(HCAMatrixBrowser)
+})
+```
+
+# Installation
+
+## Available on GitHub
+
+```{r, eval=FALSE}
+BiocManager::install("Bioconductor/HCABrowser")
+BiocManager::install("Bioconductor/HCAMatrixBrowser")
+```
+
+Load packages:
+
+```{r, echo=FALSE}
+suppressMessages({
+    library(HCABrowser)
+    library(HCAMatrixBrowser)
+})
+```
+
+```{r, eval = FALSE}
+library(HCABrowser)
+library(HCAMatrixBrowser)
+```
+
+# Constructing a query using the `HCABrowser`
+
+```{r}
+hca <- HCABrowser::HumanCellAtlas()
+
+res <- hca %>% filter(
+    library_construction_approach.ontology == "EFO:0008931" &
+    paired_end == True &
+    specimen_from_organism_json.biomaterial_core.ncbi_taxon_id == 9606
+)
+
+(bundle_fqids <- res %>% pullBundles)
+```
+
+# Downloading HCA expression matrix data
+
+By default, the `loadHCAMatrix` function from `HCAMatrixBrowser` uses
+the following:
+
+URL endpoint: https://matrix.data.humancellatlas.org/v0/matrix
+format: [loom](http://loompy.org/)
+
+```{r}
+(lex <- HCAMatrixBrowser::loadHCAMatrix(bundle_fqids))
+```
+
+'CellID' is used for the column names by default
+
+```{r}
+head(colnames(lex))
+```
+
