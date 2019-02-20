@@ -60,14 +60,14 @@ res <- hca %>% filter(
 By default, the `loadHCAMatrix` function from `HCAMatrixBrowser` uses
 the following:
 
-URL endpoint: https://matrix.data.humancellatlas.org/v0/matrix
-format: [loom](http://loompy.org/)
+* URL endpoint: https://matrix.data.humancellatlas.org/v0/matrix
+* format: [loom](http://loompy.org/)
 
 ```{r}
 (lex <- HCAMatrixBrowser::loadHCAMatrix(bundle_fqids))
 ```
 
-'CellID' is used for the column names by default
+* Column annotations (`colnames`): "CellID"
 
 ```{r}
 head(colnames(lex))
