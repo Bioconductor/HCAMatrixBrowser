@@ -1,6 +1,6 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: 
     person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org")
@@ -11,12 +11,11 @@ Description: The HCAMatrixBrowser queries the HCA matrix endpoint to download
 License: Artistic-2.0
 Depends:
   R (>= 3.6.0),
-  SummarizedExperiment
+  LoomExperiment
 Imports:
   BiocFileCache,
   digest,
   httr,
-  LoomExperiment,
   progress,
   rappdirs
 Suggests:
