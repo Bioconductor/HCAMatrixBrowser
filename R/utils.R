@@ -49,3 +49,10 @@ setCache <-
         message("HCAMatrixBrowser cache directory set to:\n    ", directory)
     invisible(directory)
 }
+
+.msg <-
+    function(fmt, ..., width=getOption("width"))
+{
+    txt <- strwrap(sprintf(fmt, ...), width=width, exdent=2)
+    paste(txt, collapse="\n")
+}

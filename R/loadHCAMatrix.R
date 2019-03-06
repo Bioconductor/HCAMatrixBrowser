@@ -88,10 +88,14 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
                 pb$tick(tokens = list(dots = .dotter(ndot, 10)))
                 Sys.sleep(2/8)
             }
+            cat("\n")
         }
 
         get_response <- httr::GET(req_address)
-        matrix_url <- httr::content(get_response)[["matrix_location"]]
+        response_obj <- httr::content(get_response)
+        if (identical(response_obj[["status"]], "Failed"))
+            stop(.msg(response_obj[["message"]]))
+        matrix_url <- response_obj[["matrix_location"]]
         rid <- names(bfcadd(bfc, rname_digest, matrix_url))
     }
 
