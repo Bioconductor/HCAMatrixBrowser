@@ -20,11 +20,11 @@ suppressPackageStartupMessages({
 
 # Installation
 
-## Available on GitHub
+## Available on Bioconductor
 
 ```{r, eval=FALSE}
-BiocManager::install("Bioconductor/HCABrowser")
-BiocManager::install("Bioconductor/HCAMatrixBrowser")
+BiocManager::install("HCABrowser")
+BiocManager::install("HCAMatrixBrowser")
 ```
 
 Load packages:
@@ -44,7 +44,7 @@ library(HCAMatrixBrowser)
 # Constructing a query using the `HCABrowser`
 
 ```{r}
-hca <- HCABrowser::HumanCellAtlas()
+hca <- HCABrowser::HCABrowser()
 
 res <- hca %>% filter(
     library_construction_approach.ontology == "EFO:0008931" &

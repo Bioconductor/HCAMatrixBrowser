@@ -49,6 +49,8 @@ NULL
 #'
 #' @return A \linkS4class{LoomExperiment} object
 #'
+#' @import LoomExperiment
+#'
 #' @examples
 #'
 #' bundle_fqids <-
