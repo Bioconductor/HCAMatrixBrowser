@@ -28,7 +28,6 @@ NULL
     )
 }
 
-#' @name HCAMatrix
 #' @title Obtain expression matrix data from the Human Cell Atlas API service
 #'
 #' @description Using a vector of data bundle identifiers (`bundle_fqids`),

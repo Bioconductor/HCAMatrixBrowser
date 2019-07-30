@@ -1,0 +1,40 @@
+#' API Entry function for the Human Cell Atlas Matrix service
+#'
+#' This function allows the use of the HCA Matrix API
+#'
+#' @return An object of class 'cBioPortal'
+#'
+#' @importFrom AnVIL Service
+#'
+#' @export
+HCAMatrix <- function() {
+    Service(
+        service = "HCAMatrix",
+        host = "matrix.dev.data.humancellatlas.org",
+        config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L,
+            http_version = 0L),
+        package = "HCAMatrixBrowser",
+        schemes = "https"
+    )
+}
+
+#' @export
+getFilters <- function(hca) {
+    unlist(
+        httr::content(
+            hca$matrix.lambdas.api.v1.core.get_filters()
+        )
+    )
+}
+
+#' @export
+filterDetails <- function(hca, filter = "genes_detected") {
+    httr::content(
+        hca$matrix.lambdas.api.v1.core.get_filter_detail(filter_name = filter)
+    )
+}
+
+# TODO
+# hca$matrix.lambdas.api.v0.core.post_matrix(
+#     jsonlite::fromJSON(txt = '{"filter": {"op": "and", "value": [ {"op": "=", "value": "Single cell transcriptome analysis of human pancreas", "field": "project.project_core.project_short_name"}, {"op": ">=", "value": 300, "field": "genes_detected"} ] }}')
+# )
