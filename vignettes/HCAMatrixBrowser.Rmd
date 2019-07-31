@@ -11,13 +11,6 @@ output:
 Package: HCAMatrixBrowser
 ---
 
-```{r, echo = FALSE, warning = FALSE}
-suppressPackageStartupMessages({
-    library(HCABrowser)
-    library(HCAMatrixBrowser)
-})
-```
-
 # Installation
 
 ## Available on Bioconductor
@@ -29,14 +22,7 @@ BiocManager::install("HCAMatrixBrowser")
 
 Load packages:
 
-```{r, echo=FALSE}
-suppressMessages({
-    library(HCABrowser)
-    library(HCAMatrixBrowser)
-})
-```
-
-```{r, eval = FALSE}
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
 library(HCABrowser)
 library(HCAMatrixBrowser)
 ```

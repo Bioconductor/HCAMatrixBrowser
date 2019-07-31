@@ -34,7 +34,3 @@ filterDetails <- function(hca, filter = "genes_detected") {
     )
 }
 
-# TODO
-# hca$matrix.lambdas.api.v0.core.post_matrix(
-#     jsonlite::fromJSON(txt = '{"filter": {"op": "and", "value": [ {"op": "=", "value": "Single cell transcriptome analysis of human pancreas", "field": "project.project_core.project_short_name"}, {"op": ">=", "value": 300, "field": "genes_detected"} ] }}')
-# )

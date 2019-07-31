@@ -1,0 +1,91 @@
+---
+title: "Generating HCAMatrix queries"
+date: "`r BiocStyle::doc_date()`"
+vignette: |
+  %\VignetteIndexEntry{HCAMatrix Queries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    toc_float: true
+Package: HCAMatrixBrowser
+---
+
+# Installation
+
+Pull development branch from `Bioconductor/HCAMatrixBrowser@newapi`
+
+```{r}
+BiocManager::install("Bioconductor/HCAMatrixBrowser@newapi")
+BiocManager::install("Bioconductor/AnVIL_rapiclient@schema-enhance")
+BiocManager::install("Bioconductor/AnVIL")
+```
+
+# Load packages
+
+```{r,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(HCAMatrixBrowser)
+library(rapiclient)
+library(AnVIL)
+```
+
+Create an HCA api object using `rapiclient`:
+
+```{r}
+(hca <- HCAMatrix())
+```
+
+Check that the schemas are available as found in the api configuration file:
+
+```{r}
+schemas(hca)
+```
+
+Some queries work: 
+
+```{r}
+getFilters(hca)
+```
+
+We can get details for a particular filter:
+
+```{r}
+filterDetails(hca, "genes_detected")
+```
+
+The parameters in API yaml file seem to be missing:
+
+```{r}
+hca$matrix.lambdas.api.v0.core.post_matrix
+```
+
+They are required for adding arguments to post / get functions
+
+## Generating schema
+
+Using the `AnVIL` package, we can obtain schema or models for queries:
+
+```{r}
+bundle_fqids <-
+    c("980b814a-b493-4611-8157-c0193590e7d9.2018-11-12T131442.994059Z",
+    "7243c745-606d-4827-9fea-65a925d5ab98.2018-11-07T002256.653887Z")
+schemas(hca)$v0_MatrixRequest(bundle_fqids = bundle_fqids, format = "loom")
+```
+
+# To Do: 
+
+Follow the example at: 
+https://github.com/HumanCellAtlas/matrix-service/blob/master/docs/HCA%20Matrix%20Service%20to%20Scanpy.ipynb
+
+Essentially we want to query the service using this infrastructure to obtain
+the data matrices:
+
+```{r,eval=FALSE}
+hca$matrix.lambdas.api.v0.core.post_matrix
+## with
+request_json <- jsonlite::fromJSON(
+    txt = '{"filter": {"op": "and", "value": [ {"op": "=", "value": "Single cell transcriptome analysis of human pancreas", "field": "project.project_core.project_short_name"}, {"op": ">=", "value": 300, "field": "genes_detected"} ] }}'
+)
+request_json
+```
+
