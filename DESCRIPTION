@@ -17,6 +17,7 @@ Imports:
   BiocFileCache,
   digest,
   httr,
+  jsonlite,
   progress,
   rappdirs
 Suggests:
