@@ -40,15 +40,20 @@ filter_detail <- function(hca, filter = "genes_detected") {
     )
 }
 
-setGeneric("filter", function(x, ...) { standardGeneric("filter") })
+setGeneric("filter", function(x, expr) { standardGeneric("filter") })
 
-setGeneric("filters", function(x, value) { standardGeneric("filters") })
+setGeneric("filters", function(x) { standardGeneric("filters") })
 
 setGeneric("filters<-", function(x, value) { standardGeneric("filters<-") })
 
 #' @export
-setMethod("filter", "HCAMatrix", function(x, expr) {
-    filt <- make_filter(enquo(expr), available_filters(x))
+setMethod("filter", c("HCAMatrix", "ANY"), function(x, expr) {
+    filt <- try({
+        if (rlang::is_formula(expr))
+            make_filter(expr, available_filters(x))
+        }, silent = TRUE)
+    if (inherits(filt, "try-error"))
+        filt <- make_filter(enquo(expr), available_filters(x))
     filters(x) <- filt
     x
 })
@@ -59,7 +64,7 @@ setMethod("filters", "HCAMatrix", function(x) {
 })
 
 #' @export
-setReplaceMethod("filters", c("HCAMatrix", "list"), function(x, value) {
+setReplaceMethod("filters", c("HCAMatrix", "ANY"), function(x, value) {
     current <- filters(x)
     if (length(current))
         slot(x, "filter") <- list( op = "and",
@@ -72,5 +77,10 @@ setReplaceMethod("filters", c("HCAMatrix", "list"), function(x, value) {
 make_filter <- function(expr, available_filters) {
     afilters <- setNames(available_filters, available_filters)
     filterlist <- c(.oplookup, afilters)
-    rlang::eval_tidy(expr, data = filterlist)
+
+    if (rlang::is_formula(expr))
+        rlang::eval_tidy(rlang::f_rhs(expr), data = filterlist,
+            env = rlang::f_env(expr))
+    else
+        rlang::eval_tidy(expr, data = filterlist)
 }
