@@ -16,11 +16,12 @@
 .logical_filter <- function(sep)
 {
     force(sep)
-    function(e1) {
+    function(e1, e2) {
         force(e1)
+        force(e2)
         list(
             op = jsonlite::unbox(sep),
-            value = e1
+            value = rbind.data.frame(e1, e2, stringsAsFactors = FALSE)
         )
     }
 }

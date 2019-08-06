@@ -67,8 +67,7 @@ setMethod("filters", "HCAMatrix", function(x) {
 setReplaceMethod("filters", c("HCAMatrix", "ANY"), function(x, value) {
     current <- filters(x)
     if (length(current))
-        slot(x, "filter") <- list( op = "and",
-            value = rbind.data.frame(current, value, stringsAsFactors = FALSE) )
+        slot(x, "filter") <- list( op = "and", value = list(current, value) )
     else
         slot(x, "filter") <- value
     x
