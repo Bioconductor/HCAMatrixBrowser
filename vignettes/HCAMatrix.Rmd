@@ -81,7 +81,7 @@ Essentially we want to query the service using this infrastructure to obtain
 the data matrices:
 
 ```{r,eval=FALSE}
-hca$matrix.lambdas.api.v0.core.post_matrix
+hca$matrix.lambdas.api.v1.core.post_matrix
 ## with
 request_json <- jsonlite::fromJSON(
     txt = '{"filter": {"op": "and", "value": [ {"op": "=", "value": "Single cell transcriptome analysis of human pancreas", "field": "project.project_core.project_short_name"}, {"op": ">=", "value": 300, "field": "genes_detected"} ] }}'
