@@ -1,6 +1,6 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: 
     person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org")
@@ -16,6 +16,7 @@ Depends:
 Imports:
   BiocFileCache,
   digest,
+  hcamatrixapi,
   httr,
   jsonlite,
   progress,
@@ -29,3 +30,6 @@ biocViews: Infrastructure, DataRepresentation
 Encoding: UTF-8
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+Remotes:
+  Bioconductor/hcamatrixapi,
+  Bioconductor/AnVIL
