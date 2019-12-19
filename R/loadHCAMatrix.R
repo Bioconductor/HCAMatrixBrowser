@@ -20,6 +20,18 @@ NULL
     httr::content(response)[["request_id"]]
 }
 
+.api_download <- function(api, fq_ids) {
+    bundles <- list(bundle_fqids = fq_ids)
+    response <- api$matrix.lambdas.api.v0.core.post_matrix(bundles)
+    httr::content(response)[["request_id"]]
+}
+
+.bind_content <- function(x) {
+    dplyr::bind_rows(
+        httr::content(x)
+    )
+}
+
 .dotter <- function(ndots, maxlength) {
     paste0(
         paste0(rep(".", times = ndots), collapse = ""),
@@ -38,19 +50,24 @@ NULL
 #' @details The matrix_query_url value points to
 #'     \url{https://matrix.data.humancellatlas.org/v0/matrix}
 #'
+#' @param api An API object of class `HCAMatrix` from the `HCAMatrix`
+#'     function
+#'
 #' @param bundle_fqids A character vector of bundle identifiers
-#' @param matrix_query_url A single character vector of the API endpoint for
-#' downloading matrix data (defaults to HCA matrix endpoint)
+#'
 #' @param verbose logical (default FALSE) whether to output stepwise messages
+#'
 #' @param names.col character (default "CellID") The column name in the
-#' `colData`` metadata to use as column names of the
-#' \linkS4class{LoomExperiment} object
+#'     `colData`` metadata to use as column names of the
+#'      \linkS4class{LoomExperiment} object
 #'
 #' @return A \linkS4class{LoomExperiment} object
 #'
 #' @import LoomExperiment
 #'
 #' @examples
+#'
+#' hca <- HCAMatrix()
 #'
 #' bundle_fqids <-
 #'     c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
@@ -59,11 +76,11 @@ NULL
 #'     "fd202a54-7085-406d-a92a-aad6dd2d3ef0.2019-05-14T121656.910000Z",
 #'     "fffe55c1-18ed-401b-aa9a-6f64d0b93fec.2019-05-17T233932.932000Z")
 #'
-#' loadHCAMatrix(bundle_fqids)
+#' loadHCAMatrix(hca, bundle_fqids)
 #'
 #' @export loadHCAMatrix
-loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
-    verbose = FALSE, names.col = "CellID")
+loadHCAMatrix <-
+    function(api, bundle_fqids, verbose = FALSE, names.col = "CellID")
 {
     stopifnot(is.character(names.col), length(names.col) == 1L,
         !is.na(names.col), !is.logical(names.col))
@@ -72,21 +89,20 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
     bfc <- .get_cache()
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
     if (!length(rid)) {
-        req_id <-
-            .initialize_download(bundle_fqids, query_url = matrix_query_url,
-                verbose = verbose)
+        req_id <- .api_download(api, bundle_fqids)
         if (verbose)
             message("Matrix query request_id: ", req_id)
-
-        req_address <- file.path(matrix_query_url, req_id)
-
+        getResponse <- function(req) {
+            httr::content(
+                api$matrix.lambdas.api.v1.core.get_matrix(request_id = req)
+            )
+        }
         pb <- progress::progress_bar$new(
             format = "  (:spin) waiting for query completion:dots :elapsedfull",
             total = NA, clear = FALSE)
 
         while (
-            identical(httr::content(httr::GET(req_address))[["status"]],
-                "In Progress")
+            identical(getResponse(req_id)[["status"]], "In Progress")
         ) {
             for (ndot in 0:10) {
                 pb$tick(tokens = list(dots = .dotter(ndot, 10)))
@@ -95,11 +111,10 @@ loadHCAMatrix <- function(bundle_fqids, matrix_query_url = .matrix_query_url,
             cat("\n")
         }
 
-        get_response <- httr::GET(req_address)
-        response_obj <- httr::content(get_response)
+        response_obj <- getResponse(req_id)
         if (identical(response_obj[["status"]], "Failed"))
             stop(.msg(response_obj[["message"]]))
-        matrix_url <- response_obj[["matrix_location"]]
+        matrix_url <- response_obj[["matrix_url"]]
         rid <- names(bfcadd(bfc, rname_digest, matrix_url))
     }
 

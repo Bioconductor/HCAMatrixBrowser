@@ -4,20 +4,19 @@
 \alias{loadHCAMatrix}
 \title{Obtain expression matrix data from the Human Cell Atlas API service}
 \usage{
-loadHCAMatrix(bundle_fqids, matrix_query_url = .matrix_query_url,
-  verbose = FALSE, names.col = "CellID")
+loadHCAMatrix(api, bundle_fqids, verbose = FALSE, names.col = "CellID")
 }
 \arguments{
-\item{bundle_fqids}{A character vector of bundle identifiers}
+\item{api}{An API object of class `HCAMatrix` from the `HCAMatrix`
+function}
 
-\item{matrix_query_url}{A single character vector of the API endpoint for
-downloading matrix data (defaults to HCA matrix endpoint)}
+\item{bundle_fqids}{A character vector of bundle identifiers}
 
 \item{verbose}{logical (default FALSE) whether to output stepwise messages}
 
 \item{names.col}{character (default "CellID") The column name in the
 `colData`` metadata to use as column names of the
-\linkS4class{LoomExperiment} object}
+ \linkS4class{LoomExperiment} object}
 }
 \value{
 A \linkS4class{LoomExperiment} object
@@ -34,6 +33,8 @@ The matrix_query_url value points to
 }
 \examples{
 
+hca <- HCAMatrix()
+
 bundle_fqids <-
     c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
     "f69b288c-fabc-4ac8-b50c-7abcae3731bc.2019-05-14T120110.781000Z",
@@ -41,6 +42,6 @@ bundle_fqids <-
     "fd202a54-7085-406d-a92a-aad6dd2d3ef0.2019-05-14T121656.910000Z",
     "fffe55c1-18ed-401b-aa9a-6f64d0b93fec.2019-05-17T233932.932000Z")
 
-loadHCAMatrix(bundle_fqids)
+loadHCAMatrix(hca, bundle_fqids)
 
 }

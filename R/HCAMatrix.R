@@ -18,6 +18,9 @@ HCAMatrix <- function() {
             host = "matrix.dev.data.humancellatlas.org",
             config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L,
                 http_version = 0L),
+            api_url =
+                system.file("service/HCAMatrix/swagger.yaml",
+                    package = "HCAMatrixBrowser", mustWork = TRUE),
             package = "HCAMatrixBrowser",
             schemes = "https"
         )
@@ -25,18 +28,66 @@ HCAMatrix <- function() {
 }
 
 #' @export
-available_filters <- function(hca) {
+available_filters <- function(api) {
     unlist(
         httr::content(
-            hca$matrix.lambdas.api.v1.core.get_filters()
+            api$matrix.lambdas.api.v1.core.get_filters()
         )
     )
 }
 
 #' @export
-filter_detail <- function(hca, filter = "genes_detected") {
+filter_detail <- function(api, filter_name) {
+    stopifnot(is.character(filter_name), length(filter_name) == 1L,
+        !is.na(filter_name), !is.logical(filter_name))
+
     httr::content(
-        hca$matrix.lambdas.api.v1.core.get_filter_detail(filter_name = filter)
+        api$matrix.lambdas.api.v1.core.get_filter_detail(
+            filter_name = filter_name
+        )
+    )
+}
+
+#' @export
+available_formats <- function(api) {
+    unlist(
+        httr::content(
+            api$matrix.lambdas.api.v0.core.get_formats()
+        )
+    )
+}
+
+#' @export
+format_detail <- function(api, format_name) {
+    stopifnot(is.character(format_name), length(format_name) == 1L,
+        !is.na(format_name), !is.logical(format_name))
+
+    temphtml <- tempfile(fileext = ".html")
+    writeLines(
+        httr::content(
+                api$matrix.lambdas.api.v1.core.get_format_detail(
+                format_name = format_name
+            )
+        ), con = file(temphtml)
+    )
+    browseURL(temphtml)
+}
+
+#' @export
+available_features <- function(api) {
+    unlist(
+        httr::content(
+            api$matrix.lambdas.api.v1.core.get_features()
+        )
+    )
+}
+
+#' @export
+feature_detail <- function(api, feature_name) {
+    httr::content(
+        api$matrix.lambdas.api.v1.core.get_feature_detail(
+            feature_name = feature_name
+        )
     )
 }
 
