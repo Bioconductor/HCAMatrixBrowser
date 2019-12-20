@@ -11,12 +11,10 @@ Description: The HCAMatrixBrowser queries the HCA matrix endpoint to download
 License: Artistic-2.0
 Depends:
   R (>= 3.6.0),
-  LoomExperiment,
   AnVIL
 Imports:
   BiocFileCache,
   digest,
-  hcamatrixapi,
   httr,
   jsonlite,
   progress,
@@ -24,12 +22,14 @@ Imports:
 Suggests:
   BiocStyle,
   knitr,
-  HCABrowser
+  HCABrowser,
+  HCAmtxzip,
+  LoomExperiment
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
 biocViews: Infrastructure, DataRepresentation
 Encoding: UTF-8
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 Remotes:
-  Bioconductor/hcamatrixapi,
-  Bioconductor/AnVIL
+  Bioconductor/AnVIL,
+  mtmorgan/HCAmtxzip

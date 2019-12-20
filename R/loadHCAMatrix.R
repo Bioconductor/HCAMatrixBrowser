@@ -3,33 +3,52 @@ NULL
 
 .matrix_query_url <- "https://matrix.data.humancellatlas.org/v0/matrix"
 
-.rname_digest <- function(fq_idvec) {
-    digest::digest(sort(fq_idvec), algo = "md5")
+.rname_digest <- function(fq_idvec, fmt) {
+    inlist <- list(bundles = sort(fq_idvec), format = fmt)
+    digest::digest(inlist, algo = "md5")
 }
 
-.initialize_download <- function(fq_ids, query_url = .matrix_query_url,
-    format = "loom", verbose)
-{
-    if (missing(fq_ids))
-        stop("<internal> Provide valid fq_ids vector")
-    body <- list(bundle_fqids = fq_ids, format = format)
-    header <- list(`Content-Type` = "application/json",
-        Accept = "application/json")
-    response <- httr::POST(query_url, header, body = body, encode = "json",
-        if (verbose) httr::verbose())
-    httr::content(response)[["request_id"]]
+.filter_digest <- function(api, fmt, feat) {
+    inlist <- list(filter = filters(api), format = fmt, feature = feat)
+    digest::digest(inlist, algo = "md5")
 }
 
-.api_download <- function(api, fq_ids) {
-    bundles <- list(bundle_fqids = fq_ids)
-    response <- api$matrix.lambdas.api.v0.core.post_matrix(bundles)
-    httr::content(response)[["request_id"]]
+.api_download <- function(api, v1query, fq_ids, fmt, feat) {
+    if (v1query)
+        args <- list(filter = filters(api), format = fmt, feature = feat)
+    else
+        args <- list(bundle_fqids = fq_ids, format = fmt)
+
+    endpoint <- paste0("matrix.lambdas.api.",
+        if (v1query) "v1" else "v0", ".core.post_matrix")
+    httr::content(
+        do.call(
+            .invoke_fun, c(api = api, name = endpoint, args)
+        )
+    )[["request_id"]]
 }
 
 .bind_content <- function(x) {
     dplyr::bind_rows(
         httr::content(x)
     )
+}
+
+.invoke_fun <- function(api, name, ...) {
+    if (!is(api, "HCAMatrix"))
+        stop("Provide a 'HCAMatrix' class API object")
+    ops <- names(AnVIL::operations(api))
+    if (!name %in% ops)
+        stop("<internal> operation name not found in API")
+
+    do.call(`$`, list(api, name))(...)
+}
+
+
+.getResponse <- function(api, req, v1) {
+    endpoint <- paste0("matrix.lambdas.api.",
+        if (v1) "v1" else "v0", ".core.get_matrix")
+    httr::content(.invoke_fun(api, endpoint, request_id = req))
 }
 
 .dotter <- function(ndots, maxlength) {
@@ -53,13 +72,19 @@ NULL
 #' @param api An API object of class `HCAMatrix` from the `HCAMatrix`
 #'     function
 #'
-#' @param bundle_fqids A character vector of bundle identifiers
+#' @param bundle_fqids character() v0 Bundle identifiers
 #'
 #' @param verbose logical (default FALSE) whether to output stepwise messages
 #'
 #' @param names.col character (default "CellID") The column name in the
 #'     `colData`` metadata to use as column names of the
-#'      \linkS4class{LoomExperiment} object
+#'     \linkS4class{LoomExperiment} object when `format = "loom"`
+#'
+#' @param format character(1) Data return format, one of:
+#'     c("loom", "mtx", "csv"); (default: "loom")
+#'
+#' @param feature character(1) Provide either cell by "gene" or "transcript"
+#'     matrices (default: "gene")
 #'
 #' @return A \linkS4class{LoomExperiment} object
 #'
@@ -78,31 +103,35 @@ NULL
 #'
 #' loadHCAMatrix(hca, bundle_fqids)
 #'
-#' @export loadHCAMatrix
+#' @export
 loadHCAMatrix <-
-    function(api, bundle_fqids, verbose = FALSE, names.col = "CellID")
+    function(api, bundle_fqids, verbose = FALSE, names.col = "CellID",
+        format = c("loom", "mtx", "csv"), feature = c("gene", "transcript")
+    )
 {
     stopifnot(is.character(names.col), length(names.col) == 1L,
         !is.na(names.col), !is.logical(names.col))
+    v1q <- missing(bundle_fqids)
+    format <- match.arg(format)
+    feature <- match.arg(feature)
 
-    rname_digest <- .rname_digest(bundle_fqids)
+    rname_digest <-
+        if (v1q)
+            .filter_digest(api, format, feature)
+        else
+            .rname_digest(bundle_fqids, format)
     bfc <- .get_cache()
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
     if (!length(rid)) {
-        req_id <- .api_download(api, bundle_fqids)
+        req_id <- .api_download(api, v1q, bundle_fqids, format, feature)
         if (verbose)
             message("Matrix query request_id: ", req_id)
-        getResponse <- function(req) {
-            httr::content(
-                api$matrix.lambdas.api.v1.core.get_matrix(request_id = req)
-            )
-        }
         pb <- progress::progress_bar$new(
             format = "  (:spin) waiting for query completion:dots :elapsedfull",
             total = NA, clear = FALSE)
 
         while (
-            identical(getResponse(req_id)[["status"]], "In Progress")
+            identical(.getResponse(api, req_id, v1q)[["status"]], "In Progress")
         ) {
             for (ndot in 0:10) {
                 pb$tick(tokens = list(dots = .dotter(ndot, 10)))
@@ -111,7 +140,7 @@ loadHCAMatrix <-
             cat("\n")
         }
 
-        response_obj <- getResponse(req_id)
+        response_obj <- .getResponse(api, req_id, v1q)
         if (identical(response_obj[["status"]], "Failed"))
             stop(.msg(response_obj[["message"]]))
         matrix_url <- response_obj[["matrix_url"]]
@@ -123,9 +152,18 @@ loadHCAMatrix <-
 
     mat_loc <- bfcrpath(bfc, rids = rid)
 
-    lex <- LoomExperiment::import(mat_loc)
-    idcol <- lex[[names.col]]
-    if (length(idcol))
-        colnames(lex) <- idcol
-    lex
+    if (identical(format, "loom")) {
+        .checkPkgsAvail("LoomExperiment")
+        lex <- LoomExperiment::import(mat_loc)
+        idcol <- lex[[names.col]]
+        if (length(idcol))
+            colnames(lex) <- idcol
+        lex
+    } else if (identical(format, "mtx")) {
+        .checkPkgsAvail("HCAmtxzip")
+        HCAmtxzip::import_mtxzip(mat_loc)
+    } else {
+        .checkPkgsAvail("readr")
+        readr::read_csv(mat_loc)
+    }
 }

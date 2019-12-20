@@ -4,19 +4,32 @@
 \alias{loadHCAMatrix}
 \title{Obtain expression matrix data from the Human Cell Atlas API service}
 \usage{
-loadHCAMatrix(api, bundle_fqids, verbose = FALSE, names.col = "CellID")
+loadHCAMatrix(
+  api,
+  bundle_fqids,
+  verbose = FALSE,
+  names.col = "CellID",
+  format = c("loom", "mtx", "csv"),
+  feature = c("gene", "transcript")
+)
 }
 \arguments{
 \item{api}{An API object of class `HCAMatrix` from the `HCAMatrix`
 function}
 
-\item{bundle_fqids}{A character vector of bundle identifiers}
+\item{bundle_fqids}{character() v0 Bundle identifiers}
 
 \item{verbose}{logical (default FALSE) whether to output stepwise messages}
 
 \item{names.col}{character (default "CellID") The column name in the
 `colData`` metadata to use as column names of the
- \linkS4class{LoomExperiment} object}
+\linkS4class{LoomExperiment} object when `format = "loom"`}
+
+\item{format}{character(1) Data return format, one of:
+c("loom", "mtx", "csv"); (default: "loom")}
+
+\item{feature}{character(1) Provide either cell by "gene" or "transcript"
+matrices (default: "gene")}
 }
 \value{
 A \linkS4class{LoomExperiment} object
