@@ -1,0 +1,55 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+options(tibble.print_min = 5, tibble.print_max = 5)
+```
+
+# HCAMatrixBrowser
+
+## Overview
+
+`HCAMatrixBrowser` gives users access to the matrix download service for
+the [Human Cell Atlas](https://data.humancellatlas.org/) project. 
+
+It provides a main function for downloading data matrices from either a set
+of `bundle_fqids` or a data filters.
+
+* `loadHCAMatrix` allows either a vector of `bundle_fqids` or an added filter
+operation to the HCA API object
+
+## API object
+
+```{r}
+library(HCAMatrixBrowser)
+
+hca <- HCAMatrix()
+```
+
+# Quick Start
+
+## with `bundle_fqids`
+
+```{r}
+my_fqids <-
+    c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
+    "f69b288c-fabc-4ac8-b50c-7abcae3731bc.2019-05-14T120110.781000Z")
+
+loadHCAMatrix(hca, bundle_fqids = my_fqids)
+```
+
+## with filter operations
+
+```{r}
+hca1 <- filter(hca, bundle_uuid == "ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775")
+## filter print out
+filters(hca1)
+
+loadHCAMatrix(hca1)
+```
