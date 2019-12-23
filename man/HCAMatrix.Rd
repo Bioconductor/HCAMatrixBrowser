@@ -7,7 +7,7 @@
 HCAMatrix()
 }
 \value{
-An object of class 'cBioPortal'
+An object of class 'HCAMatrix'
 }
 \description{
 This function allows the use of the HCA Matrix API

@@ -6,7 +6,7 @@
 #'
 #' This function allows the use of the HCA Matrix API
 #'
-#' @return An object of class 'cBioPortal'
+#' @return An object of class 'HCAMatrix'
 #'
 #' @importFrom AnVIL Service
 #'
@@ -91,10 +91,13 @@ feature_detail <- function(api, feature_name) {
     )
 }
 
+#' @export
 setGeneric("filter", function(x, expr) { standardGeneric("filter") })
 
+#' @export
 setGeneric("filters", function(x) { standardGeneric("filters") })
 
+#' @export
 setGeneric("filters<-", function(x, value) { standardGeneric("filters<-") })
 
 #' @export

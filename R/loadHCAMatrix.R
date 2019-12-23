@@ -164,6 +164,8 @@ loadHCAMatrix <-
         HCAmtxzip::import_mtxzip(mat_loc)
     } else {
         .checkPkgsAvail("readr")
-        readr::read_csv(mat_loc)
+        files <- unzip(mat_loc, exdir = tempfile())
+        message("This may take a while...")
+        lapply(setNames(files, basename(files)), readr::read_csv)
     }
 }
