@@ -120,6 +120,7 @@ loadHCAMatrix <-
             .filter_digest(api, format, feature)
         else
             .rname_digest(bundle_fqids, format)
+    mat_name <- if (v1q) "matrix_url" else "matrix_location"
     bfc <- .get_cache()
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
     if (!length(rid)) {
@@ -143,8 +144,8 @@ loadHCAMatrix <-
         response_obj <- .getResponse(api, req_id, v1q)
         if (identical(response_obj[["status"]], "Failed"))
             stop(.msg(response_obj[["message"]]))
-        matrix_url <- response_obj[["matrix_url"]]
-        rid <- names(bfcadd(bfc, rname_digest, matrix_url))
+        matrix_loc <- response_obj[[mat_name]]
+        rid <- names(bfcadd(bfc, rname_digest, matrix_loc))
     }
 
     if (verbose)
