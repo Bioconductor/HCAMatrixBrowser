@@ -15,7 +15,7 @@ Package: HCAMatrixBrowser
 
 ## Available on Bioconductor
 
-```{r, eval=FALSE}
+```{r,eval=FALSE}
 BiocManager::install("HCABrowser")
 BiocManager::install("HCAMatrixBrowser")
 ```

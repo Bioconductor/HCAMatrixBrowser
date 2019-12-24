@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.httr-oauth$
+^README\.Rmd$
+^\.travis\.yml$
+

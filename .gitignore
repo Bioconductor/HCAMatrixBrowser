@@ -8,7 +8,6 @@
 # Example code in package build process
 *-Ex.R
 
-.Rbuildignore
 # Output files from R CMD build
 /*.tar.gz
 
