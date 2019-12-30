@@ -22,8 +22,8 @@ function}
 \item{verbose}{logical (default FALSE) whether to output stepwise messages}
 
 \item{names.col}{character (default "CellID") The column name in the
-`colData`` metadata to use as column names of the
-\linkS4class{LoomExperiment} object when `format = "loom"`}
+`colData` metadata to use as column names of the
+\code{LoomExperiment} object when `format = "loom"`}
 
 \item{format}{character(1) Data return format, one of:
 c("loom", "mtx", "csv"); (default: "loom")}
@@ -32,17 +32,14 @@ c("loom", "mtx", "csv"); (default: "loom")}
 matrices (default: "gene")}
 }
 \value{
-A \linkS4class{LoomExperiment} object
+A `LoomExperiment`, `SingleCellExperiment` or `tibble` object
 }
 \description{
 Using a vector of data bundle identifiers (`bundle_fqids`),
 users can request the associated matrix of expression values. The query
 submitted by `loadHCAMatrix` may take some time to be completed. Once the
-query is completed, a `LoomExperiment` object is loaded.
-}
-\details{
-The matrix_query_url value points to
-    \url{https://matrix.data.humancellatlas.org/v0/matrix}
+query is completed, either a `LoomExperiment`, `SingleCellExperiment`,
+or `tibble` table is returned (depending on the value of `format`).
 }
 \examples{
 

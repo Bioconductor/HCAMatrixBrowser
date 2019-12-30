@@ -1,6 +1,6 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.99.5
+Version: 0.99.6
 Authors@R: 
     person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org")
@@ -13,18 +13,25 @@ Depends:
   R (>= 3.6.0),
   AnVIL
 Imports:
+  BiocGenerics,
   BiocFileCache,
   digest,
+  dplyr,
   httr,
   jsonlite,
+  methods,
   progress,
-  rappdirs
+  rappdirs,
+  rlang,
+  stats,
+  utils
 Suggests:
   BiocStyle,
   knitr,
   HCABrowser,
   HCAmtxzip,
-  LoomExperiment
+  LoomExperiment,
+  readr
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
 biocViews: Infrastructure, DataRepresentation
 Encoding: UTF-8

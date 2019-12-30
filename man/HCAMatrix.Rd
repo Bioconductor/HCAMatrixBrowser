@@ -2,13 +2,64 @@
 % Please edit documentation in R/HCAMatrix.R
 \name{HCAMatrix}
 \alias{HCAMatrix}
+\alias{available_filters}
+\alias{filter_detail}
+\alias{available_formats}
+\alias{format_detail}
+\alias{available_features}
+\alias{feature_detail}
 \title{API Entry function for the Human Cell Atlas Matrix service}
 \usage{
 HCAMatrix()
+
+available_filters(api)
+
+filter_detail(api, filter_name)
+
+available_formats(api)
+
+format_detail(api, format_name)
+
+available_features(api)
+
+feature_detail(api, feature_name)
+}
+\arguments{
+\item{api}{An HCAMatrix API object}
+
+\item{filter_name}{character(1) The name of the filter to get more detail on}
+
+\item{format_name}{character(1) The format for which to obtain more detail on}
+
+\item{feature_name}{character(1) The feature for which to obtain more detail
+on}
 }
 \value{
 An object of class 'HCAMatrix'
 }
 \description{
 This function allows the use of the HCA Matrix API
+}
+\section{Filters}{
+
+    * available_filter - Get a list of filters within the API to filter with
+    * filter_detail - Obtain more detail on a particular filter name
+}
+
+\section{Formats}{
+
+    * available_formats - Get a list of matrix format outputs
+    * format_detail - Obtain more detail on a particular matrix file format
+}
+
+\section{Features}{
+
+    * available_features - Get a list of feature outputs, either genes or
+        transcripts
+    * feature_detail - Obtain more information on a matrix feature type
+}
+
+\examples{
+hca <- HCAMatrix()
+
 }

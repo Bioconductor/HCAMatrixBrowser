@@ -36,7 +36,7 @@
 )
 
 .setOps <- function() {
-    x <- setNames(.names_table[["op"]], .names_table[["name"]])
+    x <- stats::setNames(.names_table[["op"]], .names_table[["name"]])
     lapply(x, function(operation) {
         if (operation %in% .logicfilters)
             .logical_filter(operation)
