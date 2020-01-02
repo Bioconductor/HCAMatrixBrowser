@@ -147,7 +147,7 @@ feature_detail <- function(api, feature_name) {
     )
 }
 
-#' @rdname filtering
+#' @name filtering
 #'
 #' @aliases filter filters
 #'
@@ -188,17 +188,17 @@ feature_detail <- function(api, feature_name) {
 #' @export
 setGeneric("filter", function(x, expr) { standardGeneric("filter") })
 
-#' @name filtering
+#' @rdname filtering
 #'
 #' @export
 setGeneric("filters", function(x) { standardGeneric("filters") })
 
-#' @name filtering
+#' @rdname filtering
 #'
 #' @export
 setGeneric("filters<-", function(x, value) { standardGeneric("filters<-") })
 
-#' @name filtering
+#' @rdname filtering
 #'
 #' @export
 setMethod("filter", c("HCAMatrix", "ANY"), function(x, expr) {
@@ -212,14 +212,14 @@ setMethod("filter", c("HCAMatrix", "ANY"), function(x, expr) {
     x
 })
 
-#' @name filtering
+#' @rdname filtering
 #'
-#' @export
+#' @exportMethod filters
 setMethod("filters", "HCAMatrix", function(x) {
     x@filter
 })
 
-#' @name filtering
+#' @rdname filtering
 #'
 #' @export
 setReplaceMethod("filters", c("HCAMatrix", "ANY"), function(x, value) {
