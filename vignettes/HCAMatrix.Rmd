@@ -26,7 +26,6 @@ BiocManager::install("Bioconductor/AnVIL")
 library(HCAMatrixBrowser)
 library(rapiclient)
 library(AnVIL)
-library(HCAmtxzip)
 ```
 
 Create an HCA api object using the `rapiclient` package:
@@ -179,15 +178,11 @@ The `loom` format is supported by the `LoomExperiment` package in Bioconductor.
 
 ### mtx
 
-For the `mtx` format, we use Martin Morgan's `HCAmtxzip` package to represent
-the data as a `SingleCellExperiment` class:
+For the `mtx` format, we represent the data as a `SingleCellExperiment` class:
 
 ```{r}
 (mtmat <- loadHCAMatrix(hcafilt, format = "mtx"))
 ```
-
-`HCAmtxzip` is available at
-[mtmorgan/HCAmtxzip](https://github.com/mtmorgan/HCAmtxzip)
 
 ### csv
 
