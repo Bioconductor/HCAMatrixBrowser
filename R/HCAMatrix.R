@@ -49,6 +49,7 @@ HCAMatrix <- function() {
             host = "matrix.dev.data.humancellatlas.org",
             config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L,
                 http_version = 0L),
+            authenticate = FALSE,
             api_url =
                 system.file("service/HCAMatrix/swagger.yaml",
                     package = "HCAMatrixBrowser", mustWork = TRUE),
