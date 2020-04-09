@@ -1,9 +1,15 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: 
-    person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
-        email = "marcel.ramos@roswellpark.org")
+    c(
+        person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
+            email = "marcel.ramos@roswellpark.org",
+            comment = c(ORCID = "0000-0002-3242-0582")),
+        person(given = "Martin", family = "Morgan", role = "aut",
+            email = "mtmorgan.bioc@gmail.com",
+            comment = c(ORCID = "0000-002-5874-8148"))
+    )
 Description: The HCAMatrixBrowser queries the HCA matrix endpoint to download
   expression data and returns a standard Bioconductor object. It uses the
   LoomExperiment package to serve matrix data that is downloaded as HDF5 loom
@@ -19,17 +25,18 @@ Imports:
   dplyr,
   httr,
   jsonlite,
+  Matrix,
   methods,
   progress,
   rappdirs,
   rlang,
+  SingleCellExperiment,
   stats,
   utils
 Suggests:
   BiocStyle,
   knitr,
   HCABrowser,
-  HCAmtxzip,
   LoomExperiment,
   readr
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
@@ -39,4 +46,3 @@ VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 Remotes:
   Bioconductor/AnVIL,
-  mtmorgan/HCAmtxzip

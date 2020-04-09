@@ -1,8 +1,8 @@
 ---
-title: "HCAMatrixBrowser"
+title: "HCAMatrixBrowser Quick Start"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
-  %\VignetteIndexEntry{HCAMatrixBrowser}
+  %\VignetteIndexEntry{HCAMatrixBrowser Quick Start}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
@@ -17,7 +17,13 @@ Package: HCAMatrixBrowser
 
 ```{r,eval=FALSE}
 BiocManager::install("HCABrowser")
-BiocManager::install("HCAMatrixBrowser")
+```
+
+## Available on GitHub
+
+```{r}
+BiocManager::install("Bioconductor/HCAMatrixBrowser")
+BiocManager::install("Bioconductor/AnVIL")
 ```
 
 Load packages:
@@ -61,7 +67,7 @@ First, we create an HCA Matrix API object with the use of the `HCAMatrix`
 function:
 
 ```{r}
-hca <- HCAMatrixBrowser::HCAMatrix()
+hca <- HCAMatrix()
 ```
 
 
@@ -73,7 +79,7 @@ the loom format as output.
 * format: [loom](http://loompy.org/)
 
 ```{r}
-(lex <- HCAMatrixBrowser::loadHCAMatrix(hca, bundle_fqids = bundle_fqids,
+(lex <- loadHCAMatrix(hca, bundle_fqids = bundle_fqids,
     format = "loom"))
 ```
 
@@ -109,3 +115,15 @@ To request the download, we can use the `loadHCAMatrix` function as well:
 ```{r}
 loadHCAMatrix(hca1, format = "loom")
 ```
+
+### Supported formats
+
+The matrix service allows you to request three different file formats:
+
+1. loom (default)
+2. mtx
+3. csv
+
+These can be requested by changing the `format` argument in the `loadHCAMatrix`
+function. For more details, see our "Generating HCAMatrix queries with the API"
+vignette.

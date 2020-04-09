@@ -157,8 +157,7 @@ loadHCAMatrix <-
             colnames(lex) <- idcol
         lex
     } else if (identical(format, "mtx")) {
-        .checkPkgsAvail("HCAmtxzip")
-        HCAmtxzip::import_mtxzip(mat_loc)
+        import_mtxzip(mat_loc)
     } else {
         .checkPkgsAvail("readr")
         files <- utils::unzip(mat_loc, exdir = tempfile())

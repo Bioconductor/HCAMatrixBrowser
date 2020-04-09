@@ -1,8 +1,8 @@
 ---
-title: "Generating HCAMatrix queries"
+title: "Generating HCAMatrix queries with the API"
 date: "`r BiocStyle::doc_date()`"
 vignette: |
-  %\VignetteIndexEntry{HCAMatrix Queries}
+  %\VignetteIndexEntry{HCAMatrix API Queries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
@@ -13,11 +13,10 @@ Package: HCAMatrixBrowser
 
 # Installation
 
-Pull development branch from `Bioconductor/HCAMatrixBrowser`
+Pull the development branch from `Bioconductor/HCAMatrixBrowser`
 
 ```{r}
 BiocManager::install("Bioconductor/HCAMatrixBrowser")
-BiocManager::install("Bioconductor/AnVIL_rapiclient")
 BiocManager::install("Bioconductor/AnVIL")
 ```
 
@@ -27,7 +26,6 @@ BiocManager::install("Bioconductor/AnVIL")
 library(HCAMatrixBrowser)
 library(rapiclient)
 library(AnVIL)
-library(HCAmtxzip)
 ```
 
 Create an HCA api object using the `rapiclient` package:
@@ -39,6 +37,9 @@ Create an HCA api object using the `rapiclient` package:
 # Schemas
 
 Check that the schemas are available as found in the api configuration file:
+__Note__. Due to downgrade from Open API Specification (OAS) version 3 to
+OAS version 2 (formerly known as Swagger), the full list of schemas may not
+be shown.
 
 ```{r}
 schemas(hca)
@@ -46,8 +47,8 @@ schemas(hca)
 
 # Exploring the endpoints
 
-There are a handful of queries that will allow you to explore the data
-model:
+Here we make available a number of helper functions that allow the user to
+explore the possible queries supported by the HCA Matrix Service data model.
 
 ## Filters
 
@@ -77,13 +78,14 @@ format_detail(hca, "mtx")
 
 ## Features
 
-The matrix service provides two types of features,
+The matrix service provides two types of features (i.e., genes and
+transcripts):
 
 ```{r}
 available_features(hca)
 ```
 
-and a short description of a feature:
+and a short description of a selected feature:
 
 ```{r}
 feature_detail(hca, "gene")
@@ -91,7 +93,7 @@ feature_detail(hca, "gene")
 
 # Request generation from schema
 
-Using the `AnVIL` package, we can obtain schema or models for queries:
+Using the `rapiclient` package, we can obtain schema or models for queries:
 
 ```{r}
 bundle_fqids <-
@@ -103,11 +105,14 @@ req <- schemas(hca)$v0_MatrixRequest(
 req
 ```
 
+For requests such as these, it is better to use the API layer provided by
+`HCAMatrixBrowser` (see examples below).
+
 # Python example
 
-The HCA group has some example JSON requests using the API in python:
+The HCA group has provided example JSON requests written in python:
 
-Their notebook can be seen here:
+The published notebook is available here:
 https://github.com/HumanCellAtlas/matrix-service/blob/master/docs/HCA%20Matrix%20Service%20to%20Scanpy.ipynb
 
 The following JSON request applies a couple of filters on the project
@@ -121,7 +126,7 @@ jsonlite::fromJSON(
 )
 ```
 
-# Replicating the example above with HCAMatrixBrowser
+# HCAMatrixBrowser example
 
 *Advanced usage note*. We are interested in using the following endpoint:
 
@@ -130,7 +135,7 @@ hca$matrix.lambdas.api.v1.core.post_matrix
 ```
 
 The `HCAMatrixBrowser` allows filtering using a non-standard evaluation
-method typical of the tidyverse. Here we recreate the filters provided
+method typical of the 'tidyverse'. Here we recreate the filters provided
 in the example above.
 
 ```{r}
@@ -138,29 +143,32 @@ hcafilt <- filter(hca,
     project.project_core.project_short_name ==
         "Single cell transcriptome analysis of human pancreas" &
         genes_detected >= 300)
+```
+
+We can subsequently view the generated filter from the operation:
+
+```{r}
 filters(hcafilt)
 ```
 
-## Matrix return formats
+# Query send-off
+
+In order to send the query with the appropriate filters, we simply use
+the provided `loadHCAMatrix` function along with the API object that contains
+the filter structure. See the following section for more information.
+
+## Data representations
 
 The matrix service allows you to request three different file formats:
 
-1. loom (default) 
+1. loom (default)
 2. mtx
 3. csv
 
 These can be requested using the `format` argument in the `loadHCAMatrix`
 function:
 
-For the `mtx` format, we use Martin Morgan's `HCAmtxzip` package to represent
-the format in a `SingleCellExperiment` class:
-
-```{r}
-(mtmat <- loadHCAMatrix(hcafilt, format = "mtx"))
-```
-
-`HCAmtxzip` is available at
-[mtmorgan/HCAmtxzip](https://github.com/mtmorgan/HCAmtxzip)
+### loom
 
 The `loom` format is supported by the `LoomExperiment` package in Bioconductor.
 
@@ -168,17 +176,26 @@ The `loom` format is supported by the `LoomExperiment` package in Bioconductor.
 (loomex <- loadHCAMatrix(hcafilt, format = "loom"))
 ```
 
+### mtx
+
+For the `mtx` format, we represent the data as a `SingleCellExperiment` class:
+
+```{r}
+(mtmat <- loadHCAMatrix(hcafilt, format = "mtx"))
+```
+
+### csv
+
 The `csv` format option gives the user the option to obtain the data
 as a list of `tibble` data.frames from the output of the `readr` package in the
 'tidyverse'.
 
-Note. Loading multiple CSV files may take considerable time depending on
+**Note**. Loading multiple CSV files may take considerable time depending on
 system configuration.
 
 ```{r}
 (tib <- loadHCAMatrix(hcafilt, format = "csv"))
 ```
-
 
 # Advanced Usage
 
