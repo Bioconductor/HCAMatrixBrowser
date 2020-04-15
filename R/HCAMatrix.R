@@ -51,7 +51,7 @@ HCAMatrix <- function() {
                 http_version = 0L),
             authenticate = FALSE,
             api_url =
-                system.file("service/HCAMatrix/swagger.yaml",
+                system.file("service/swagger.yaml",
                     package = "HCAMatrixBrowser", mustWork = TRUE),
             package = "HCAMatrixBrowser",
             schemes = "https"

@@ -4,7 +4,7 @@ info:
   description: Human Cell Atlas Matrix Service API
   version: 1.0.0
 servers:
-  - url: https://{apiHost}
+  - url: https://matrix.data.humancellatlas.org
     variables:
       apiHost:
         default: ${API_HOST}
@@ -34,7 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/v0_MatrixResponse'
+                $ref: '#/components/schemas/v0_MatrixPostResponse'
         "400":
           description: "Bad request"
           content:
@@ -65,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/v0_MatrixResponse'
+                $ref: '#/components/schemas/v0_MatrixGetResponse'
         "404":
           description: "Request not found"
           content:
@@ -88,26 +88,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/v0_MatrixFormat'
-  /v0/dss/notification:
-    post:
-      summary: "Handles a DSS notification event."
-      description: "Handles a DSS notification event such as bundle CREATE, DELETE and TOMBSTONE."
-      operationId: matrix.lambdas.api.v0.core.dss_notification
-      tags:
-        - internal
-      requestBody:
-        description: "DSS subscription event JSON payload"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v0_DssNotification'
-      responses:
-        "200":
-          description: "Success"
-          content:
-            application/json:
-              schema:
-                type: string
   /v1/matrix:
     post:
       summary: Request an expression matrix
@@ -172,7 +152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/v1_MatrixResponse'
+                $ref: '#/components/schemas/v1_MatrixPostResponse'
         '400':
           description: 'Bad request.'
           content:
@@ -204,7 +184,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/v1_MatrixResponse'
+                $ref: '#/components/schemas/v1_MatrixGetResponse'
         '404':
           description: "Matrix request id not found."
           content:
@@ -408,7 +388,21 @@ components:
         - loom
         - csv
         - mtx
-    v0_MatrixResponse:
+    v0_MatrixPostResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        non_human_request_ids:
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          $ref: '#/components/schemas/v0_MatrixRequestStatus'
+        message:
+          type: string
+    v0_MatrixGetResponse:
       type: object
       properties:
         request_id:
@@ -433,22 +427,6 @@ components:
       properties:
         message:
           type: string
-    v0_DssNotification:
-      type: object
-      properties:
-        transaction_id:
-          type: string
-        subscription_id:
-          type: string
-        event_type:
-          type: string
-        match:
-          type: object
-          properties:
-            bundle_uuid:
-              type: string
-            bundle_version:
-              type: string
     v1_ComparisonFilterOperator:
       description: 'Comparison operators allowed in matrix filters.'
       type: string
@@ -556,7 +534,20 @@ components:
       description: 'UUID identifying a matrix request.'
       type: string
       format: uuid
-    v1_MatrixResponse:
+    v1_MatrixPostResponse:
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/v1_RequestId'
+        non_human_request_ids:
+          type: object
+          additionalProperties:
+            type: string
+        status:
+          $ref: '#/components/schemas/v1_MatrixStatus'
+        message:
+          type: string
+    v1_MatrixGetResponse:
       type: object
       properties:
         request_id:
