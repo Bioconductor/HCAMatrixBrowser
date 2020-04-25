@@ -44,5 +44,3 @@ biocViews: Infrastructure, DataRepresentation
 Encoding: UTF-8
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
-Remotes:
-  Bioconductor/AnVIL,
