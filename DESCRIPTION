@@ -1,6 +1,6 @@
 Package: HCAMatrixBrowser
 Title: Extract and manage matrix data from the Human Cell Atlas project
-Version: 0.99.10
+Version: 0.99.11
 Authors@R: 
     c(
         person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
