@@ -37,7 +37,7 @@ Suggests:
   BiocStyle,
   knitr,
   HCABrowser,
-  LoomExperiment,
+  LoomExperiment (>= 1.5.3),
   readr
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
 biocViews: Infrastructure, DataRepresentation
