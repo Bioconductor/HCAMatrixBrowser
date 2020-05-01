@@ -39,7 +39,7 @@ Suggests:
   LoomExperiment (>= 1.5.3),
   readr
 BugReports: https://github.com/Bioconductor/HCAMatrixBrowser
-biocViews: Infrastructure, DataRepresentation
+biocViews: Infrastructure, DataRepresentation, Software
 Encoding: UTF-8
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
