@@ -17,7 +17,7 @@
     function(path, verbose = FALSE)
 {
     headers <- readLines(path, 2L)
-    dims <- as.integer(strsplit(headers[2], " ")[[1]][1:2])
+    dims <- as.integer(strsplit(headers[2], " ")[[1]][c(1, 2)])
     !verbose || .message("dim: ", dims[1], " ", dims[2])
     v <- scan(
         path, list(integer(), integer(), numeric()), skip = 2,
