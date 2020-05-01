@@ -52,7 +52,8 @@
 #' \dontrun{
 #'     import_mtxzip("path/to/mtx/archive.zip")
 #' }
-#' @export
+#'
+#' @keywords internal
 import_mtxzip <-
     function(path, ...,
         exdir = tempfile(), overwrite = FALSE, verbose = FALSE)

@@ -38,4 +38,6 @@ Import Human Cell Atlas '.mtx.zip' archives
 \dontrun{
     import_mtxzip("path/to/mtx/archive.zip")
 }
+
 }
+\keyword{internal}
