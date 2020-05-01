@@ -16,7 +16,7 @@ Description: The HCAMatrixBrowser queries the HCA matrix endpoint to download
   format.
 License: Artistic-2.0
 Depends:
-  R (>= 3.6.0),
+  R (>= 4.0.0),
   AnVIL
 Imports:
   BiocGenerics,
