@@ -5,7 +5,7 @@
 #' API protocol via OAS version 2.0. The original version OAS 3 was converted
 #' using the APIMatic converter (\url{apimatic.io}).
 #'
-#' @importFrom methods new
+#' @importFrom methods new slot slot<-
 #'
 #' @seealso \link{HCAMatrix}, \link[AnVIL]{Service}
 #'
@@ -220,18 +220,34 @@ setMethod("filters", "HCAMatrix", function(x) {
     x@filter
 })
 
+.replaceSlots <-
+function (object, ..., .slotList = list())
+{
+    slots <- c(list(...), .slotList)
+    slots_names <- names(slots)
+    for (i in seq_along(slots)) {
+        slot_name <- slots_names[[i]]
+        if (slot_name == "mcols")
+            slot_name <- "elementMetadata"
+        old_slot_val <- slot(object, slot_name)
+        slot_val <- slots[[i]]
+        slot(object, slot_name, check = FALSE) <- slot_val
+    }
+    object
+}
+
 #' @rdname filtering
 #'
 #' @export
 setReplaceMethod("filters", c("HCAMatrix", "ANY"), function(x, value) {
     current <- filters(x)
     if (length(current))
-        BiocGenerics:::replaceSlots(
+        .replaceSlots(
             x,
             filter = list(op = "and", value = list(current, value))
         )
     else
-        BiocGenerics:::replaceSlots(x, filter = value)
+        .replaceSlots(x, filter = value)
 })
 
 make_filter <- function(expr, available_filters) {
