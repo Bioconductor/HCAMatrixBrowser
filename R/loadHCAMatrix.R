@@ -128,7 +128,7 @@ loadHCAMatrix <-
         while (
             identical(.getResponse(api, req_id, v1q)[["status"]], "In Progress")
         ) {
-            for (ndot in 0:10) {
+            for (ndot in seq(0, 10)) {
                 pb$tick(tokens = list(dots = .dotter(ndot, 10)))
                 Sys.sleep(2/8)
             }
