@@ -27,7 +27,6 @@ Imports:
   Matrix,
   methods,
   progress,
-  rappdirs,
   rlang,
   SingleCellExperiment,
   stats,

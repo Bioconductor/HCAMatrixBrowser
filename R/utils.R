@@ -15,7 +15,7 @@
 
 .get_cache <- function() {
     cache <- getOption("HCAMatrixBrowser_cache",
-        setCache(directory = rappdirs::user_cache_dir("HCAMatrixBrowser"))
+        setCache(directory = tools::R_user_dir("HCAMatrixBrowser", "cache"))
     )
     BiocFileCache::BiocFileCache(cache)
 }
@@ -25,7 +25,7 @@
 }
 
 setCache <-
-    function(directory = rappdirs::user_cache_dir("HCAMatrixBrowser"),
+    function(directory = tools::R_user_dir("HCAMatrixBrowser", "cache"),
         verbose = TRUE, ask = interactive())
 {
     stopifnot(is.character(directory), identical(length(directory), 1L),
