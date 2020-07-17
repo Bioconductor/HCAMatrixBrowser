@@ -1,8 +1,6 @@
 #' @importFrom BiocFileCache bfcquery bfcrpath bfcadd bfcdownload
 NULL
 
-.matrix_query_url <- "https://matrix.data.humancellatlas.org/v0/matrix"
-
 .rname_digest <- function(fq_idvec, fmt) {
     inlist <- list(bundles = sort(fq_idvec), format = fmt)
     digest::digest(inlist, algo = "md5")

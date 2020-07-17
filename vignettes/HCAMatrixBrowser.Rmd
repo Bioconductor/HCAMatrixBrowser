@@ -13,17 +13,22 @@ Package: HCAMatrixBrowser
 
 # Installation
 
-## Available on Bioconductor
+## HCABrowser
+
+First install the `HCABrowser` to be able to query for `bundle_fqid`
+identifiers.
 
 ```{r,eval=FALSE}
 BiocManager::install("HCABrowser")
 ```
 
-## Available on GitHub
+## HCAMatrixBrowser on Bioconductor (>= 3.12)
 
-```{r}
-BiocManager::install("Bioconductor/HCAMatrixBrowser")
-BiocManager::install("Bioconductor/AnVIL")
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)
+    install.packages("BiocManager")
+
+install("HCAMatrixBrowser")
 ```
 
 Load packages:
@@ -35,7 +40,7 @@ library(HCAMatrixBrowser)
 
 # Constructing a query using the `HCABrowser`
 
-*Warning*. `HCABrowser` code may not work.
+*Warning*. `HCABrowser` queries under construction.
 
 ```{r,eval=FALSE}
 hcabrowser <- HCABrowser::HCABrowser()
@@ -74,7 +79,8 @@ hca <- HCAMatrix()
 ## v0 Service (legacy)
 
 By default, the `loadHCAMatrix` function from `HCAMatrixBrowser` uses
-the loom format as output.
+the loom format as output. See the 'Supported formats' section below
+for more details.
 
 * format: [loom](http://loompy.org/)
 
