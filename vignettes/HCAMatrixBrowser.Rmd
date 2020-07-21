@@ -133,3 +133,40 @@ The matrix service allows you to request three different file formats:
 These can be requested by changing the `format` argument in the `loadHCAMatrix`
 function. For more details, see our "Generating HCAMatrix queries with the API"
 vignette.
+
+## `filter` operations
+
+Recent changes to the `HCAMatrixBrowser` package, allow us to make use
+of the built-in API functionality. We can use one or more filters to
+specify a particular query in the HCAMatrix API.
+
+In this example, we use the existing `bundle_fqids` character vector
+to generate a filter and apply it to the API class object (`hca`).
+
+```{r}
+hca2 <- filter(hca, dss_bundle_fqid %in% bundle_fqids)
+```
+
+### `filters`
+
+We use the `filters` function to get a view of the applied filters.
+
+```{r}
+filters(hca2)
+```
+
+For more information on filters, see the `HCAMatrix` vignette titled
+'Generating HCAMatrix queries with the API'.
+
+### Sending the query
+
+Once we have prepared the appropriate filters, we can send the query
+off to the HCA Matrix Service to get generate a response.
+
+**Note**. We don't need to do much more than supplying the HCA API object
+and a particular data format (default is `loom`).
+
+```{r}
+loadHCAMatrix(hca2)
+```
+

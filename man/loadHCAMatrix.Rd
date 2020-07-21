@@ -45,11 +45,19 @@ or `tibble` table is returned (depending on the value of `format`).
 
 hca <- HCAMatrix()
 
+## with an bundle_fqid character vector
+
 bundle_fqids <-
     c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
     "f69b288c-fabc-4ac8-b50c-7abcae3731bc.2019-05-14T120110.781000Z",
     "f8ba80a9-71b1-4c15-bcfc-c05a50660898.2019-05-14T122536.545000Z")
 
 loadHCAMatrix(hca, bundle_fqids)
+
+## using filtering operation
+
+hca2 <- filter(hca, dss_bundle_fqid \%in\% bundle_fqids)
+filters(hca2)
+loadHCAMatrix(hca2)
 
 }

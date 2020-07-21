@@ -19,6 +19,7 @@ NULL
 
     endpoint <- paste0("matrix.lambdas.api.",
         if (v1query) "v1" else "v0", ".core.post_matrix")
+
     httr::content(
         do.call(
             .invoke_fun, c(api = api, name = endpoint, args)
@@ -88,12 +89,20 @@ NULL
 #'
 #' hca <- HCAMatrix()
 #'
+#' ## with an bundle_fqid character vector
+#'
 #' bundle_fqids <-
 #'     c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
 #'     "f69b288c-fabc-4ac8-b50c-7abcae3731bc.2019-05-14T120110.781000Z",
 #'     "f8ba80a9-71b1-4c15-bcfc-c05a50660898.2019-05-14T122536.545000Z")
 #'
 #' loadHCAMatrix(hca, bundle_fqids)
+#'
+#' ## using filtering operation
+#'
+#' hca2 <- filter(hca, dss_bundle_fqid %in% bundle_fqids)
+#' filters(hca2)
+#' loadHCAMatrix(hca2)
 #'
 #' @export
 loadHCAMatrix <-
@@ -147,6 +156,7 @@ loadHCAMatrix <-
 
     if (identical(format, "loom")) {
         .checkPkgsAvail("LoomExperiment")
+
         lex <- LoomExperiment::import(mat_loc)
         idcol <- lex[[names.col]]
         if (length(idcol))

@@ -46,7 +46,7 @@ HCAMatrix <- function() {
     .HCAMatrix(
         Service(
             service = "HCAMatrix",
-            host = "matrix.dev.data.humancellatlas.org",
+            host = "matrix.data.humancellatlas.org",
             config = httr::config(ssl_verifypeer = 0L, ssl_verifyhost = 0L,
                 http_version = 0L),
             authenticate = FALSE,
