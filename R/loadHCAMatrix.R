@@ -14,8 +14,12 @@ NULL
 .api_download <- function(api, v1query, fq_ids, fmt, feat) {
     if (v1query)
         args <- list(filter = filters(api), format = fmt, feature = feat)
-    else
+    else {
+        ## handle issue with auto_unbox = TRUE in rapiclient
+        if (identical(length(fq_ids), 1L))
+            fq_ids <- list(fq_ids)
         args <- list(bundle_fqids = fq_ids, format = fmt)
+    }
 
     endpoint <- paste0("matrix.lambdas.api.",
         if (v1query) "v1" else "v0", ".core.post_matrix")
