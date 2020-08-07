@@ -17,3 +17,4 @@ to provide R API representations.
 ### Bug fixes and minor improvements
 
 * Updated vignettes to include API changes
+* Allow for singleton `bundle_fqid` queries for v0 endpoint (@dvantwisk, #2)
