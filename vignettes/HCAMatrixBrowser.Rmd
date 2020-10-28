@@ -13,22 +13,17 @@ Package: HCAMatrixBrowser
 
 # Installation
 
-## HCABrowser
+## HCAMatrixBrowser and HCABrowser
 
 First install the `HCABrowser` to be able to query for `bundle_fqid`
 identifiers.
 
 ```{r,eval=FALSE}
-BiocManager::install("HCABrowser")
-```
-
-## HCAMatrixBrowser on Bioconductor (>= 3.12)
-
-```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)
     install.packages("BiocManager")
 
-install("HCAMatrixBrowser")
+BiocManager::install("HCABrowser")
+BiocManager::install("HCAMatrixBrowser")
 ```
 
 Load packages:
