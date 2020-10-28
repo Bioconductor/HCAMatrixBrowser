@@ -15,9 +15,11 @@ Package: HCAMatrixBrowser
 
 Pull the development branch from `Bioconductor/HCAMatrixBrowser`
 
-```{r}
-BiocManager::install("Bioconductor/HCAMatrixBrowser")
-BiocManager::install("Bioconductor/AnVIL")
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)
+    install.packages("BiocManager")
+
+BiocManager::install("HCAMatrixBrowser")
 ```
 
 # Load packages
