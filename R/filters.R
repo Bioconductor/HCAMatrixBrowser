@@ -7,7 +7,7 @@
         force(e2)
         list(
             op = jsonlite::unbox(sep),
-            field = e1,
+            field = jsonlite::unbox(e1),
             value = e2
         )
     }

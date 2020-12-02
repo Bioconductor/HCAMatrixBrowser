@@ -13,7 +13,7 @@ Package: HCAMatrixBrowser
 
 # Installation
 
-Pull the development branch from `Bioconductor/HCAMatrixBrowser`
+Obtain `HCAMatrixBrowser` from the Bioconductor repository.
 
 ```{r,eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)

@@ -11,15 +11,11 @@ NULL
     digest::digest(inlist, algo = "md5")
 }
 
-.api_download <- function(api, v1query, fq_ids, fmt, feat) {
+.api_request <- function(api, v1query, fq_ids, fmt, feat) {
     if (v1query)
         args <- list(filter = filters(api), format = fmt, feature = feat)
-    else {
-        ## handle issue with auto_unbox = TRUE in rapiclient
-        if (identical(length(fq_ids), 1L))
-            fq_ids <- list(fq_ids)
+    else
         args <- list(bundle_fqids = fq_ids, format = fmt)
-    }
 
     endpoint <- paste0("matrix.lambdas.api.",
         if (v1query) "v1" else "v0", ".core.post_matrix")
@@ -28,7 +24,14 @@ NULL
         do.call(
             .invoke_fun, c(api = api, name = endpoint, args)
         )
-    )[["request_id"]]
+    )
+}
+
+.api_request_id <- function(res) {
+    if (is.raw(res))
+        stop(rawToChar(res))
+    else
+        res[["request_id"]]
 }
 
 .bind_content <- function(x) {
@@ -129,7 +132,11 @@ loadHCAMatrix <-
     bfc <- .get_cache()
     rid <- bfcquery(bfc, rname_digest, "rname")$rid
     if (!length(rid)) {
-        req_id <- .api_download(api, v1q, bundle_fqids, format, feature)
+        resp <- .api_request(
+            api, v1q, bundle_fqids,
+            jsonlite::unbox(format), jsonlite::unbox(feature)
+        )
+        req_id <- .api_request_id(resp)
         if (verbose)
             message("Matrix query request_id: ", req_id)
         pb <- progress::progress_bar$new(
