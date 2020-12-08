@@ -59,13 +59,14 @@ setCache <-
 
 .checkPkgsAvail <- function(pkgnames) {
     vapply(pkgnames, function(pkgname) {
-    if (!requireNamespace(pkgname, quietly = TRUE)) {
-        func <- as.character(sys.call(1L)[[1L]])
-        func <- func[!(func %in% c("::", "HCAMatrixBrowser"))]
-        stop("Install the '", pkgname, "' package to use '", func, "'",
-            call. = FALSE)
-    } else
-        TRUE
+        if (!requireNamespace(pkgname, quietly = TRUE)) {
+            func <- as.character(sys.call(1L)[[1L]])
+            func <- func[!(func %in% c("::", "HCAMatrixBrowser"))]
+            stop("Install the '", pkgname, "' package to use '", func, "'",
+                call. = FALSE)
+        } else {
+            TRUE
+        }
     }, logical(1L))
 }
 
