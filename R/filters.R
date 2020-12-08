@@ -5,6 +5,7 @@
     function(e1, e2) {
         force(e1)
         force(e2)
+        e2 <- if (length(e2) == 1L) jsonlite::unbox(e2) else e2
         list(
             op = jsonlite::unbox(sep),
             field = jsonlite::unbox(e1),
