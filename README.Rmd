@@ -11,12 +11,12 @@ knitr::opts_chunk$set(
 options(tibble.print_min = 5, tibble.print_max = 5)
 ```
 
-# HCAMatrixBrowser
+# HCAMatrixBrowser <a href='https://bioconductor.org/packages/HCAMatrixBrowser/'><img src='https://raw.githubusercontent.com/Bioconductor/BiocStickers/master/HCAMatrixBrowser/HCAMatrixBrowser.png' align="right" height="139" /></a>
 
 ## Overview
 
 `HCAMatrixBrowser` gives users access to the matrix download service for
-the [Human Cell Atlas](https://data.humancellatlas.org/) project. 
+the [Human Cell Atlas](https://data.humancellatlas.org/) project.
 
 It provides a main function for downloading data matrices from either a set
 of `bundle_fqids` or a data filters.
@@ -36,7 +36,7 @@ hca <- HCAMatrix()
 
 ## with `bundle_fqids`
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 my_fqids <-
     c("ffd3bc7b-8f3b-4f97-aa2a-78f9bac93775.2019-05-14T122736.345000Z",
     "f69b288c-fabc-4ac8-b50c-7abcae3731bc.2019-05-14T120110.781000Z")
