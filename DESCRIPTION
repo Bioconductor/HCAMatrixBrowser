@@ -4,7 +4,7 @@ Version: 1.3.0
 Authors@R: 
     c(
         person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
-            email = "marcel.ramos@roswellpark.org",
+            email = "marcel.ramos@sph.cuny.edu",
             comment = c(ORCID = "0000-0002-3242-0582")),
         person(given = "Martin", family = "Morgan", role = "aut",
             email = "mtmorgan.bioc@gmail.com",
